@@ -1,0 +1,14 @@
+{
+  "name": "vladbikovproj",
+  "version": "0.0.0",
+  "author": "Vlad BiKoV",
+  "private": true,
+  "scripts": {
+    "start": "node ./public/server.js"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.1",
+    "winston": "^2.3.1"
+  }
+}
