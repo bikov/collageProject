@@ -20,11 +20,9 @@ app.get('/', (req, res) => {
         function(err, data) {
             if (err) {
                 winston.error(`Unable to open index.html because: \t '${err}'`);
-                res.writeHead(500);
-                return res.end('Error loading index.html');
+                return res.status(500).end('Error loading index.html');
             }
-            res.writeHead(200);
-            res.end(data);
+            res.status(200).end(data);
         }
     ); 
 });

@@ -1,36 +1,18 @@
 let messagesElement = document.getElementById('messages'),
     lastMessageElement = null,
-    roomsList = document.getElementById('roomsList');
-function addMessage(message, isMe) {
-    let userImage = document.createElement('img');
-    userImage.src = "./images/user.png";
-    userImage.classList += ' user-image';
-    let newMessageElement = document.createElement('div'),
-        newMessageText = document.createTextNode(message);
-    newMessageElement.classList += ' user-message-node';
+    roomsList = document.getElementById('roomsList'),
+    inputElement = document.getElementById('input');
+    socket = io.connect('http://localhost:4000');
 
-    if (isMe) {
-        newMessageElement.style.direction = 'ltr';
-    } else {
-        newMessageElement.style.direction = 'rtl';
-    }
-
-    newMessageElement.appendChild(userImage);
-    newMessageElement.appendChild(newMessageText);
-
-    messagesElement.insertBefore(newMessageElement,
-        lastMessageElement);
-    lastMessageElement = newMessageElement;
-}
-
-let socket = io.connect('http://localhost:4000');
 socket.on('serverMessage', function (content,isMe) {
     addMessage(content, isMe);
 });
+
 socket.on('login', function () {
     let username = prompt('What username would you like to use?');
     socket.emit('login', username);
 });
+
 socket.on('newRoom', function () {
     socket.emit('getRooms')
 });
@@ -39,13 +21,15 @@ socket.on('rooms',function (rooms) {
     roomsList.innerHTML = "";
     rooms.forEach((room) => addRoom(room));
 });
+
 function joinRoom(room) {
     socket.emit('join', room);
 }
+
 function sendMessage(message) {
     socket.emit('clientMessage', message);
 }
-let inputElement = document.getElementById('input');
+
 inputElement.onkeydown = function (keyboardEvent) {
     if (keyboardEvent.keyCode === 13) {
         sendMessage(inputElement.value);
@@ -80,4 +64,26 @@ function addRoom(roomName) {
 
 function onRoomClick(event) {
     joinRoom(event.target.textContent)
+}
+
+function addMessage(message, isMe) {
+    let userImage = document.createElement('img');
+    userImage.src = "./images/user.png";
+    userImage.classList += ' user-image';
+    let newMessageElement = document.createElement('div'),
+        newMessageText = document.createTextNode(message);
+    newMessageElement.classList += ' user-message-node';
+
+    if (isMe) {
+        newMessageElement.style.direction = 'ltr';
+    } else {
+        newMessageElement.style.direction = 'rtl';
+    }
+
+    newMessageElement.appendChild(userImage);
+    newMessageElement.appendChild(newMessageText);
+
+    messagesElement.insertBefore(newMessageElement,
+        lastMessageElement);
+    lastMessageElement = newMessageElement;
 }
