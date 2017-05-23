@@ -1,7 +1,3 @@
-//noinspection JSDuplicatedDeclaration
-/**
- * Created by bikov on 5/12/2017.
- */
 let fs = require('fs'),
     path  = require('path'),
     express = require('express'),
@@ -9,14 +5,16 @@ let fs = require('fs'),
     server = require('http').Server(app),
     io = require('socket.io')(server),
     chat = require('./chatServer')(io),
-    config = require('../config/config.json'),
+    config = require('../config/serverConfig.json'),
     winstonConfigurator = require('../config/winstonConfiguration'),
     winston = require('winston');
 
 winstonConfigurator(path.normalize(__dirname + '/../'));
 app.use(express.static(path.normalize(__dirname+'/../public')));
-server.on('listening',()=> winston.info(`listening on port: ${config.port}`));
+
+server.on('listening',()=> winston.info(`application listening on port: ${config.port}`));
 server.listen(config.port);
+
 app.get('/', (req, res) => {
     fs.readFile(path.normalize(__dirname + '/../public/index.html'),
         function(err, data) {

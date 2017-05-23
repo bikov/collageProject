@@ -1,5 +1,6 @@
 let messagesElement = document.getElementById('messages'),
-    lastMessageElement = null;
+    lastMessageElement = null,
+    roomsList = document.getElementById('roomsList');
 function addMessage(message, isMe) {
     let userImage = document.createElement('img');
     userImage.src = "./images/user.png";
@@ -21,28 +22,28 @@ function addMessage(message, isMe) {
         lastMessageElement);
     lastMessageElement = newMessageElement;
 }
-let socket = io.connect('http://localhost:4002');
-socket.on('serverMessage', function (content) {
-    addMessage(content);
+
+let socket = io.connect('http://localhost:4000');
+socket.on('serverMessage', function (content,isMe) {
+    addMessage(content, isMe);
 });
 socket.on('login', function () {
     let username = prompt('What username would you like to use?');
     socket.emit('login', username);
 });
-function sendCommand(command, args) {
-    if (command === 'j') {
-        socket.emit('join', args);
-    } else {
-        alert('unknown command: ' + command);
-    }
+socket.on('newRoom', function () {
+    socket.emit('getRooms')
+});
+
+socket.on('rooms',function (rooms) {
+    roomsList.innerHTML = "";
+    rooms.forEach((room) => addRoom(room));
+});
+function joinRoom(room) {
+    socket.emit('join', room);
 }
 function sendMessage(message) {
-    let commandMatch = message.match(/^\/(\w*)(.*)/);
-    if (commandMatch) {
-        sendCommand(commandMatch[1], commandMatch[2].trim());
-    } else {
-        socket.emit('clientMessage', message);
-    }
+    socket.emit('clientMessage', message);
 }
 let inputElement = document.getElementById('input');
 inputElement.onkeydown = function (keyboardEvent) {
@@ -55,10 +56,10 @@ inputElement.onkeydown = function (keyboardEvent) {
     }
 };
 
-var roomsList = document.getElementById('roomsList');
-
 document.getElementById('add-room-button').onclick = function (ev) {
-    addRoom('dsadsa');
+    let newRoomName = prompt('Please enter room name:');
+    addRoom(newRoomName);
+    joinRoom(newRoomName);
 };
 
 function addRoom(roomName) {
@@ -77,6 +78,6 @@ function addRoom(roomName) {
     roomsList.appendChild(roomContainer);
 }
 
-function onRoomClick() {
-    alert('you clicked me');
+function onRoomClick(event) {
+    joinRoom(event.target.textContent)
 }
