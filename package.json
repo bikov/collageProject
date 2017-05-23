@@ -2,9 +2,12 @@
   "name": "vladbikovproj",
   "version": "0.0.0",
   "author": "Vlad BiKoV",
-  "private": true,
+  "repository" : "https://github.com/bikov/collageProject.git",
+  "private": false,
   "scripts": {
-    "start": "node ./public/server.js"
+    "installServer" : "npm i",
+    "installClient" : "cd public && npm i",
+    "start": "node ./server/server.js"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
