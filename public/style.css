@@ -1,0 +1,56 @@
+body {
+    background-image: url("./images/bg.jpg");
+}
+
+.label-color {
+    color: yellow;
+}
+
+.user-message-node {
+    border: 2px groove black;
+    border-radius: 100px;
+    margin-bottom: 5px;
+    background-color: rgba(232, 184, 135, 0.5);
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+.user-text-node {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.user-image {
+    width: 5%;
+}
+
+.room-node {
+    margin-bottom: 5px;
+}
+
+.room-node button {
+    width: 180px;
+}
+
+#add-room-button {
+    margin-left: 135px;
+}
+
+#roomsDiv {
+    position: absolute;
+    top: 80px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    border: 1px solid #EEEEEE;
+    padding: 8px;
+}
+
+#messages {
+    position: fixed;
+    top: 80px;
+    bottom: 8px;
+    left: 250px;
+    right: 8px;
+    border: 1px solid #EEEEEE;
+    padding: 8px;
+}

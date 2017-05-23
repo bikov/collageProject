@@ -4,15 +4,17 @@
  */
 let fs = require('fs'),
     path  = require('path'),
-    app = require('express')(),
+    express = require('express'),
+    app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
-    chat = require('./chat')(io),
+    chat = require('./chatServer')(io),
     config = require('../config/config.json'),
     winstonConfigurator = require('../config/winstonConfiguration'),
     winston = require('winston');
 
 winstonConfigurator(path.normalize(__dirname + '/../'));
+app.use(express.static(path.normalize(__dirname+'/../public')));
 server.on('listening',()=> winston.info(`listening on port: ${config.port}`));
 server.listen(config.port);
 app.get('/', (req, res) => {
